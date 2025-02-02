@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ai16z Trait Rarity Guesser</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+        }
+        .game-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            display: inline-block;
+        }
+        input[type="text"] {
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            width: 200px;
+        }
+        button {
+            padding: 10px 20px;
+            margin-top: 10px;
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #4cae4c;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Welcome to the Ai16z Trait Rarity Guesser!</h1>
+        <p>Guess the rarity of a randomly selected trait from the Ai16z Partners NFT collection.</p>
+        <div id="game-content"></div>
+        <input type="text" id="guess-input" placeholder="Enter rarity (Common, Uncommon, Rare, Legendary)">
+        <button onclick="submitGuess()">Submit Guess</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const traits = {
+            "Background": {"Starry Night": "Rare", "Clouds": "Common", "Carrots": "Uncommon", "Aricot": "Uncommon", "idk": "Common", "Cyan": "Common", "Rose": "Uncommon", "Lavender": "Rare"},
+            "Clothes": {"Goth Dress": "Rare", "Punk3493": "Uncommon", "Pippin": "Common", "Shoggoth": "Legendary", "ai16z Bikini": "Rare", "Cargo Top": "Common", "Hoddie": "Common", "Jumper": "Uncommon", "Kimono": "Rare", "Free Ross": "Legendary"},
+            "Eyes": {"Vivid Emerald": "Rare", "Cosmic Sparkle": "Legendary", "Happy": "Common", "Emerald Wink": "Uncommon", "6th Eyes": "Rare", "Golden Gleam": "Legendary", "Aqua Sparkle": "Uncommon", "Fire": "Rare", "Amber Glow": "Uncommon", "Amber Sad": "Common", "Sunlit Wink": "Rare"},
+            "Hair": {"Blue Short Hair": "Common", "Crimson Band": "Uncommon", "Peach Ponytail": "Common", "Charcoal Fringe": "Uncommon", "Blue Shells": "Rare", "Chestnut Waves": "Common", "Pink Hair": "Uncommon", "Blonde Ribbon": "Common", "Golden Shag": "Rare", "Mint Fringe": "Uncommon", "Moonlit Locks": "Legendary", "Golden Braid": "Rare", "Lilac Bob": "Uncommon", "Twin Tails": "Common", "Pink Clip": "Uncommon"},
+            "Head": {"Halo": "Legendary", "Cash Headband": "Rare", "ai16z Trucker Cap": "Uncommon", "Cat Ear Cap": "Common", "Black ai16z Beanie": "Common", "Santa Hat": "Rare", "Bamboo Hat": "Uncommon", "Black Join Us Partner Cap": "Common", "Cute Pink Beanie": "Uncommon", "Nurse Cap": "Rare", "Orange ai16z Beanie": "Common", "Blue Join Us Partner Cap": "Uncommon"},
+            "Mouth": {"Smiling": "Common", "Lightly Smiling": "Common", "Yum": "Uncommon", "Angry": "Common", "Smiley": "Uncommon", "Lollipop": "Rare", "Excited": "Common", "Worried": "Uncommon", "Sly": "Rare", "Grinding Teeth": "Uncommon", "Puzzled": "Common", "Scared": "Uncommon"},
+            "Skin": {"Ivory": "Common", "Caramel": "Uncommon", "Rose": "Rare", "Vanilla": "Common"}
+        };
+
+        let score = 0;
+        let rounds = 5;
+        let currentRound = 0;
+        let currentTrait, currentRarity;
+
+        function startGame() {
+            document.getElementById('game-content').innerHTML = '';
+            score = 0;
+            currentRound = 0;
+            nextRound();
+        }
+
+        function nextRound() {
+            if (currentRound < rounds) {
+                currentRound++;
+                let category = Object.keys(traits)[Math.floor(Math.random() * Object.keys(traits).length)];
+                let traitList = Object.entries(traits[category]);
+                [currentTrait, currentRarity] = traitList[Math.floor(Math.random() * traitList.length)];
+                document.getElementById('game-content').innerHTML = `<p>Round ${currentRound}:</p><p>Category: ${category}</p><p>Trait: ${currentTrait}</p>`;
+            } else {
+                endGame();
+            }
+        }
+
+        function submitGuess() {
+            let guess = document.getElementById('guess-input').value.trim();
+            if (guess === currentRarity) {
+                score++;
+                document.getElementById('result').innerHTML = `<p>Correct! ${currentTrait} is ${currentRarity}.</p>`;
+            } else {
+                document.getElementById('result').innerHTML = `<p>Sorry, that's incorrect. ${currentTrait} is ${currentRarity}.</p>`;
+            }
+            nextRound();
+        }
+
+        function endGame() {
+            let message = `Game over! Your final score is ${score}/${rounds}. `;
+            if (score === rounds) {
+                message += "Perfect score! You're an Ai16z NFT expert! 🎉";
+            } else if (score >= rounds / 2) {
+                message += "Not bad! You know your traits. 🚀";
+            } else {
+                message += "Keep learning about Ai16z Partners NFTs! 🔍";
+            }
+            document.getElementById('game-content').innerHTML = `<p>${message}</p>`;
+        }
+
+        window.onload = startGame;
+    </script>
+</body>
+</html>
